@@ -91,39 +91,7 @@ class MainActivity : AppCompatActivity() {
             posts.add(0, newPost)
             listAdapter.submitList(posts.toList())
         }
-
-    private fun deletePostFromApi(post: Post) {
-        lifecycle.coroutineScope.launch {
-            try {
-                val resp = instance.postService.deletePost(post.id)
-                if (resp.isSuccessful) {
-                    posts.remove(post)
-                    withContext(Dispatchers.Main) {
-                        listAdapter.submitList(posts.toList())
-                    }
-                }
-                showCode(resp.code())
-            } catch (e: Exception) {
-                Snackbar.make(binding.root, R.string.trouble_network, Snackbar.LENGTH_LONG)
-                    .show()
-            }
-        }
-    }
-
-    private fun createPostInApi(title: String, body: String) =
-        lifecycle.coroutineScope.launch(Dispatchers.IO) {
-            try {
-                val newPost = Post(userId, posts.last().id + 1, title, body)
-                val resp = instance.postService.createPost(newPost)
-                if (resp.isSuccessful) {
-                    posts.add(0, newPost)
-                    listAdapter.submitList(posts.toList())
-                }
-                showCode(resp.code())
-            } catch (e: Exception) {
-                Snackbar.make(binding.root, R.string.trouble_network, Snackbar.LENGTH_SHORT).show()
-            }
-        }
+    
 
 
     override fun onSaveInstanceState(outState: Bundle) {
